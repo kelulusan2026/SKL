@@ -148,7 +148,7 @@
             <div id="statusMsg"></div>
             <div id="downloadArea"></div>
         </div>
-        <p class="footer-note">Dibuat with ❤️ by Tim IT PPLG • SMKN 1 Semparuk</p>
+        <p class="footer-note">Dibuat with ❤️ by Tim IT RPL • SMKN 1 Semparuk</p>
     </div>
 
     <script>
@@ -214,11 +214,12 @@
                     resBox.style.display = "block";
                     resBox.className = "animate__animated animate__backInUp";
 
-                    if (daftarTidakLulus.includes(input)) {
-                        msg.innerHTML = `<h2 style="color:var(--error)">HOLD ON!</h2><p>Silakan hubungi Wali Kelas untuk informasi kelulusan Anda.</p>`;
-                        dl.innerHTML = "";
-                        return;
-                    }
+                   if (daftarTidakLulus.includes(input)) {
+    msg.innerHTML = `<h2 style="color:var(--error)">PENGUMUMAN</h2>
+                     <p>Untuk saat ini, status kelulusan Kamu <b>belum dapat ditampilkan</b> secara mandiri.</p>
+                     <p>Mohon kesediaan Kamu untuk <b>menghubungi Wali Kelas</b> atau datang ke sekolah guna mendapatkan informasi lebih lanjut.</p>`;
+    return;
+}
 
                     const fileKetemu = listFile.find(f => f.startsWith(input));
 
@@ -226,7 +227,7 @@
                         confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
                         const nama = fileKetemu.replace(input, "").replace(/\.[^/.]+$/, "").trim();
                         msg.innerHTML = `
-                            <h2 style="color:var(--primary)">CONGRATS!</h2>
+                            <h2 style="color:var(--primary)">CONGRATS! KAMU LULUS</h2>
                             <p style="font-size:1.3rem; font-weight:700;">${nama}</p>
                             <p style="opacity:0.7">Kamu resmi menjadi Alumni SMKN 1 Semparuk!</p>`;
                         dl.innerHTML = `<a href="SKL 2026/${encodeURIComponent(fileKetemu)}" class="btn-download" download>Download SKL (PDF)</a>`;
