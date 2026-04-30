@@ -153,11 +153,12 @@
             dl.innerHTML = "";
 
             // A. CEK APAKAH ADA DI DAFTAR TIDAK LULUS
-            if (daftarTidakLulus.includes(input)) {
-                msg.innerHTML = `<h2 style="color:var(--error)">TIDAK LULUS</h2>
-                                 <p>Mohon maaf, status kelulusan Anda ditangguhkan. <br>Silakan hubungi Wali Kelas untuk informasi lebih lanjut.</p>`;
-                return;
-            }
+           if (daftarTidakLulus.includes(input)) {
+    msg.innerHTML = `<h2 style="color:var(--error)">PENGUMUMAN</h2>
+                     <p>Untuk saat ini, status kelulusan Anda <b>belum dapat ditampilkan</b> secara mandiri.</p>
+                     <p>Mohon kesediaan Anda untuk <b>menghubungi Wali Kelas</b> atau datang ke sekolah guna mendapatkan informasi lebih lanjut.</p>`;
+    return;
+}
 
             try {
                 // B. AMBIL DATABASE DARI DAFTAR.TXT
