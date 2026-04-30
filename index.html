@@ -10,171 +10,176 @@
         :root { 
             --primary: #00f2fe; 
             --secondary: #4facfe; 
-            --dark: #08090d; 
-            --glass: rgba(255, 255, 255, 0.1);
+            --dark: #050508; 
+            --glass: rgba(255, 255, 255, 0.07);
             --success: #2ecc71;
             --error: #ff4757;
-            --warning: #f1c40f;
         }
         
         body { 
             margin: 0; 
             font-family: 'Poppins', sans-serif; 
-            background: radial-gradient(circle at center, #1a1c2c 0%, var(--dark) 100%);
+            background: var(--dark);
             color: white; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh;
             overflow: hidden;
+            perspective: 1000px;
         }
 
-        /* Background blur animasi */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--secondary);
-            filter: blur(150px);
-            border-radius: 50%;
+        /* --- EFEK LANGIT BINTANG --- */
+        .stars-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            animation: float 10s infinite alternate;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
         }
 
-        @keyframes float {
-            0% { transform: translate(-50%, -50%); }
-            100% { transform: translate(50%, 50%); }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--duration) infinite;
         }
 
+        @keyframes twinkle {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        /* --- EFEK BINTANG JATUH --- */
+        .shooting-star {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.1), 0 0 0 8px rgba(255,255,255,0.1), 0 0 20px rgba(255,255,255,1);
+            animation: animate-star 3s linear infinite;
+        }
+
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+            height: 1px;
+            background: linear-gradient(90deg, #fff, transparent);
+        }
+
+        @keyframes animate-star {
+            0% { transform: rotate(315deg) translateX(0); opacity: 1; }
+            70% { opacity: 1; }
+            100% { transform: rotate(315deg) translateX(-1000px); opacity: 0; }
+        }
+
+        /* --- ASTRONOT BERKELILING (ORBITING) --- */
+        .astronaut {
+            position: absolute;
+            width: 100px;
+            z-index: 1;
+            filter: drop-shadow(0 0 15px var(--secondary));
+            /* Jalur Orbit */
+            animation: orbitAstronaut 25s linear infinite;
+        }
+
+        @keyframes orbitAstronaut {
+            from { transform: rotate(0deg) translateX(250px) rotate(0deg); }
+            to   { transform: rotate(360deg) translateX(250px) rotate(-360deg); }
+        }
+
+        /* --- CONTAINER --- */
         .container { 
             background: var(--glass);
-            backdrop-filter: blur(20px); 
-            padding: 2.5rem; 
-            border-radius: 24px; 
-            border: 1px solid rgba(255,255,255,0.15); 
+            backdrop-filter: blur(25px); 
+            padding: 3rem 2.5rem; 
+            border-radius: 30px; 
+            border: 1px solid rgba(255,255,255,0.1); 
             width: 90%; 
-            max-width: 420px; 
+            max-width: 400px; 
             text-align: center; 
-            box-shadow: 0 25px 45px rgba(0,0,0,0.4);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            position: relative;
+            z-index: 10;
         }
 
-        /* CSS UNTUK LOGO */
-        .logo-sekolah {
-            width: 100px; /* Ukuran logo */
-            height: auto;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
-            animation: pulse 3s infinite;
-        }
+        .logo-sekolah { width: 90px; margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--primary)); }
+        h1 { background: linear-gradient(to bottom, #fff, var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 4rem; margin: 0; font-weight: 900; letter-spacing: -3px; }
+        .subtitle { font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 2.5rem; color: var(--secondary); font-weight: 600; }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.9; }
-        }
+        input { width: 100%; padding: 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: white; font-size: 1.1rem; text-align: center; outline: none; transition: 0.4s; margin-bottom: 15px; }
+        input:focus { border-color: var(--primary); background: rgba(255,255,255,0.1); box-shadow: 0 0 30px rgba(0, 242, 254, 0.15); }
+        button { width: 100%; padding: 18px; border-radius: 20px; border: none; background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%); color: #050508; font-weight: 800; cursor: pointer; transition: 0.5s; text-transform: uppercase; letter-spacing: 1px; }
+        button:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 20px 40px rgba(79, 172, 254, 0.4); }
 
-        h1 { 
-            background: linear-gradient(to right, var(--primary), var(--secondary)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            font-size: 3.5rem; 
-            margin: 0; 
-            font-weight: 900;
-            letter-spacing: -2px;
-            line-height: 1;
-        }
-
-        .subtitle { opacity: 0.8; margin-bottom: 2rem; font-size: 0.85rem; font-weight: 400; text-transform: uppercase; letter-spacing: 2px; }
-
-        input { 
-            width: 100%; 
-            padding: 16px; 
-            border-radius: 16px; 
-            border: 2px solid rgba(255,255,255,0.1); 
-            background: rgba(0,0,0,0.2); 
-            color: white; 
-            font-size: 1.2rem; 
-            text-align: center; 
-            outline: none; 
-            box-sizing: border-box;
-            transition: 0.4s;
-        }
-
-        input:focus { border-color: var(--primary); background: rgba(0,0,0,0.4); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2); }
-
-        button { 
-            width: 100%; 
-            padding: 16px; 
-            margin-top: 20px;
-            border-radius: 16px; 
-            border: none; 
-            background: linear-gradient(45deg, var(--secondary), var(--primary)); 
-            color: #000; 
-            font-weight: 800; 
-            font-size: 1rem;
-            cursor: pointer; 
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            text-transform: uppercase;
-        }
-
-        button:hover { transform: scale(1.02); box-shadow: 0 15px 30px rgba(79, 172, 254, 0.4); }
-
-        #loader {
-            display: none;
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
+        #result { margin-top: 2rem; display: none; padding: 25px; border-radius: 25px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); }
+        .btn-download { display: inline-block; margin-top: 20px; padding: 15px 30px; background: var(--success); color: white; text-decoration: none; border-radius: 15px; font-weight: 700; box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3); }
+        #loader { display: none; width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 20px 0; overflow: hidden; }
         #loader-bar { width: 0%; height: 100%; background: var(--primary); transition: width 0.5s ease; }
-
-        #result { margin-top: 1.5rem; display: none; padding: 25px; border-radius: 20px; background: rgba(255,255,255,0.05); }
-
-        .btn-download { 
-            display: inline-block; 
-            margin-top: 20px; 
-            padding: 14px 35px; 
-            background: var(--success); 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 14px; 
-            font-weight: 700; 
-            transition: 0.3s;
-        }
-
-        .footer-note { font-size: 0.75rem; opacity: 0.5; margin-top: 2.5rem; }
+        .footer-note { font-size: 0.7rem; opacity: 0.4; margin-top: 3rem; }
     </style>
 </head>
 <body>
 
-    <div class="container animate__animated animate__fadeInDown">
-        <!-- PASTIKAN NAMA FILE LOGO SESUAI (misal: logo.png) -->
-        <img src="logo.png" alt="Logo SMKN 1 Semparuk" class="logo-sekolah">
-        
+    <div class="stars-container" id="starField"></div>
+
+    <!-- Astronot Berkeliling -->
+    <svg class="astronaut" viewBox="0 0 512 512">
+        <path fill="#e0e0e0" d="M377 105c-27-27-71-27-98 0l-15 15c-27 27-27 71 0 98l15 15c27 27 71 27 98 0l15-15c27-27 27-71 0-98l-15-15z"/>
+        <path fill="#4facfe" d="M356 126c-15-15-40-15-56 0l-15 15c-15 15-15 40 0 56l15 15c15 15 40 15 56 0l15-15c15-15 15-40 0-56l-15-15z"/>
+        <circle cx="256" cy="256" r="100" fill="#ffffff" />
+        <path fill="#333" d="M210 230a10 10 0 1 1 20 0 10 10 0 1 1-20 0zm72 0a10 10 0 1 1 20 0 10 10 0 1 1-20 0zM220 280s15 20 36 20 36-20 36-20" stroke="#333" stroke-width="5" fill="none" stroke-linecap="round"/>
+    </svg>
+
+    <div class="container animate__animated animate__zoomIn">
+        <img src="logo.png" alt="Logo" class="logo-sekolah">
         <h1>2026</h1>
-        <p class="subtitle">Kelulusan SMKN 1 Semparuk</p>
-        
-        <input type="number" id="nisnInput" placeholder="Masukkan NISN Anda..." pattern="\d*">
-        <button onclick="cekStatus()" id="btnCek">Cek Kelulusan</button>
-
+        <p class="subtitle">Portal Kelulusan</p>
+        <input type="number" id="nisnInput" placeholder="Ketik NISN Kamu..." pattern="\d*">
+        <button onclick="cekStatus()" id="btnCek">Buka Masa Depan</button>
         <div id="loader"><div id="loader-bar"></div></div>
-
-        <div id="result" class="animate__animated">
+        <div id="result">
             <div id="statusMsg"></div>
             <div id="downloadArea"></div>
         </div>
-
-        <p class="footer-note">© 2026 Tim IT PPLG • SMKN 1 Semparuk</p>
+        <p class="footer-note">Dibuat with ❤️ by Tim IT PPLG • SMKN 1 Semparuk</p>
     </div>
 
     <script>
-        const daftarTidakLulus = [
-            "0076372612", "0065736875", "0069244360", "0081064769", "0065373754",
-            "0088122839", "0075031441", "0061383661", "0085543500", "0086366856"
-        ];
+        const field = document.getElementById('starField');
+        
+        // Buat Bintang Statis
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+            field.appendChild(star);
+        }
+
+        // Buat Bintang Jatuh
+        function createShootingStar() {
+            const sStar = document.createElement('div');
+            sStar.className = 'shooting-star';
+            sStar.style.top = Math.random() * 50 + '%';
+            sStar.style.left = Math.random() * 100 + '%';
+            sStar.style.animationDuration = Math.random() * 2 + 2 + 's';
+            field.appendChild(sStar);
+            setTimeout(() => { sStar.remove(); }, 4000);
+        }
+        setInterval(createShootingStar, 2000);
+
+        const daftarTidakLulus = ["0076372612", "0065736875", "0069244360", "0081064769", "0065373754"];
 
         async function cekStatus() {
             const input = document.getElementById('nisnInput').value.trim();
@@ -185,19 +190,18 @@
             const lBar = document.getElementById('loader-bar');
             const btn = document.getElementById('btnCek');
 
-            if (!input) { alert("Harap masukkan NISN!"); return; }
+            if (!input) { alert("NISN tidak boleh kosong!"); return; }
 
             btn.disabled = true;
-            btn.innerText = "Mencari...";
+            btn.innerText = "Menganalisa...";
             resBox.style.display = "none";
             loader.style.display = "block";
             lBar.style.width = "0%";
             
-            setTimeout(() => { lBar.style.width = "60%"; }, 100);
+            setTimeout(() => { lBar.style.width = "70%"; }, 200);
 
             try {
                 const response = await fetch('daftar.txt?t=' + new Date().getTime());
-                if (!response.ok) throw new Error();
                 const data = await response.text();
                 const listFile = data.split(/\r?\n/).map(f => f.trim()).filter(f => f !== "");
                 
@@ -206,53 +210,34 @@
                 setTimeout(() => {
                     loader.style.display = "none";
                     btn.disabled = false;
-                    btn.innerText = "Cek Kelulusan";
+                    btn.innerText = "Buka Masa Depan";
                     resBox.style.display = "block";
-                    resBox.className = "animate__animated animate__zoomIn";
+                    resBox.className = "animate__animated animate__backInUp";
 
                     if (daftarTidakLulus.includes(input)) {
-                        msg.innerHTML = `
-                            <h2 style="color:var(--error)">PEMBERITAHUAN</h2>
-                            <p style="font-size: 0.9rem; line-height: 1.6;">
-                                Mohon maaf, status kelulusan Anda <b>belum dapat ditampilkan</b> secara mandiri.<br><br>
-                                Silakan hubungi <b>Wali Kelas</b> Anda untuk informasi lebih lanjut.
-                            </p>`;
+                        msg.innerHTML = `<h2 style="color:var(--error)">HOLD ON!</h2><p>Silakan hubungi Wali Kelas untuk informasi kelulusan Anda.</p>`;
                         dl.innerHTML = "";
                         return;
                     }
 
-                    const fileKetemu = listFile.find(namaFile => namaFile.startsWith(input));
+                    const fileKetemu = listFile.find(f => f.startsWith(input));
 
                     if (fileKetemu) {
-                        confetti({ 
-                            particleCount: 180, spread: 80, origin: { y: 0.6 },
-                            colors: ['#00f2fe', '#4facfe', '#2ecc71', '#ffffff']
-                        });
-                        
-                        const namaSiswa = fileKetemu.replace(input, "").replace(/\.[^/.]+$/, "").trim();
-
+                        confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+                        const nama = fileKetemu.replace(input, "").replace(/\.[^/.]+$/, "").trim();
                         msg.innerHTML = `
-                            <h2 style="color:var(--success); margin-bottom:5px;">SELAMAT!</h2>
-                            <p style="margin-top:0; opacity:0.8;">Status: <b>LULUS</b></p>
-                            <p style="font-size: 1.2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top:15px; font-weight:bold;">
-                                ${namaSiswa || 'Siswa'}
-                            </p>`;
-                        
-                        dl.innerHTML = `<a href="SKL 2026/${encodeURIComponent(fileKetemu)}" class="btn-download" download>Unduh SKL (PDF)</a>`;
+                            <h2 style="color:var(--primary)">CONGRATS!</h2>
+                            <p style="font-size:1.3rem; font-weight:700;">${nama}</p>
+                            <p style="opacity:0.7">Kamu resmi menjadi Alumni SMKN 1 Semparuk!</p>`;
+                        dl.innerHTML = `<a href="SKL 2026/${encodeURIComponent(fileKetemu)}" class="btn-download" download>Download SKL (PDF)</a>`;
                     } else {
-                        msg.innerHTML = `
-                            <h2 style="color:var(--warning)">TIDAK DITEMUKAN</h2>
-                            <p>NISN <b>${input}</b> tidak terdaftar.<br>Cek kembali nomor Anda atau hubungi Admin.</p>`;
+                        msg.innerHTML = `<h2>UPS!</h2><p>Data tidak ditemukan. Pastikan NISN benar.</p>`;
                         dl.innerHTML = "";
                     }
-                }, 800);
-
-            } catch (error) {
-                loader.style.display = "none";
+                }, 1000);
+            } catch (e) {
+                alert("Gagal memuat database!");
                 btn.disabled = false;
-                btn.innerText = "Coba Lagi";
-                resBox.style.display = "block";
-                msg.innerHTML = "<p style='color:var(--error)'>Database tidak ditemukan atau Anda sedang offline.</p>";
             }
         }
     </script>
