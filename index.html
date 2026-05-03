@@ -80,43 +80,44 @@
         /* --- ASTRONOT --- */
         .astronaut {
     position: absolute;
-    /* Mulai dari tengah layar */
     top: 50%;
     left: 50%;
-    width: 150px; 
-    filter: drop-shadow(0 0 25px rgba(0, 242, 254, 0.4));
-    /* Gerakan jauh lebih lambat (35 detik) agar tidak pusing karena area luas */
-    animation: orbitLayarLuas 35s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    width: 160px; /* Ukuran pas untuk detail gambarnya */
+    filter: drop-shadow(0 0 20px rgba(79, 172, 254, 0.5));
+    /* Gerakan smooth dan lambat agar cinematic */
+    animation: melintasKiri 28s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     pointer-events: none;
     user-select: none;
     z-index: 1;
 }
 
-@keyframes orbitLayarLuas {
+@keyframes melintasKiri {
     0% { 
-        /* Mulai dari jauh di belakang layar (kanan) */
-        transform: translate(-50%, -50%) rotate(0deg) translateX(45vw) rotate(0deg) scale(0.5);
+        /* Mulai dari sisi kiri jauh, di belakang (z-index rendah) */
+        transform: translate(-50%, -50%) rotate(0deg) translateX(-45vw) translateY(10vh) scale(0.4);
         z-index: 1;
-        opacity: 0.4;
+        opacity: 0.3;
         filter: blur(4px) brightness(0.6);
     }
-    25% {
-        opacity: 0.7;
+    
+    /* Titik saat mendekat ke tengah */
+    45%, 55% {
+        z-index: 100; /* Pindah ke depan kontainer */
     }
-    /* TITIK DEPAN: Melintas tepat di depan mata (area container) */
+
+    /* TITIK PUNCAK: Melintasi tepat di depan kontainer dari arah kanan ke kiri */
     50% { 
-        transform: translate(-50%, -50%) rotate(180deg) translateX(45vw) rotate(-180deg) scale(1.5);
-        z-index: 20; 
+        /* scale(1.7) membuat astronot terlihat sangat dekat saat di depan kontainer */
+        transform: translate(-50%, -50%) rotate(-180deg) translateX(0vw) translateY(0vh) scale(1.7);
         opacity: 1;
-        filter: blur(0px) brightness(1.2);
+        filter: blur(0px) brightness(1.1);
     }
-    75% {
-        opacity: 0.7;
-    }
+
     100% { 
-        transform: translate(-50%, -50%) rotate(360deg) translateX(45vw) rotate(-360deg) scale(0.5);
+        /* Kembali ke sisi kiri, masuk ke kegelapan lagi */
+        transform: translate(-50%, -50%) rotate(-360deg) translateX(-45vw) translateY(10vh) scale(0.4);
         z-index: 1;
-        opacity: 0.4;
+        opacity: 0.3;
         filter: blur(4px) brightness(0.6);
     }
 }
