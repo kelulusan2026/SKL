@@ -78,43 +78,50 @@
         }
 
         /* --- ASTRONOT --- */
-        /* ASTRONOT DENGAN EFEK LEWAT DEPAN-BELAKANG */
-.astronaut {
+        .astronaut {
     position: absolute;
-    width: 140px;
-    filter: drop-shadow(0 0 20px rgba(0, 242, 254, 0.6));
-    /* Gunakan animasi baru 'orbitComplex' */
-    animation: orbitComplex 25s linear infinite, floating 4s ease-in-out infinite;
+    width: 140px; 
+    filter: drop-shadow(0 0 25px rgba(0, 242, 254, 0.4));
+    /* Menggunakan cubic-bezier agar gerakan melambat di ujung dan cepat di tengah */
+    animation: orbitSmooth 25s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
     pointer-events: none;
     user-select: none;
-    transition: z-index 0.3s;
+    z-index: 1;
 }
 
-@keyframes orbitComplex {
-    /* 0% : Di belakang (z-index: 1) */
+@keyframes orbitSmooth {
     0% { 
-        transform: rotate(0deg) translateX(200px) rotate(0deg); 
-        z-index: 1; 
+        transform: translate(-50%, -50%) rotate(0deg) translateX(220px) rotate(0deg) scale(0.8);
+        z-index: 1;
+        opacity: 0.6;
+        filter: blur(2px) brightness(0.7);
     }
-    /* 25% : Mulai bergerak ke samping */
-    25% { z-index: 1; }
-    /* 50% : Berada di depan container (z-index: 20) */
+    /* Saat di samping, mulai transisi ke depan */
+    25% {
+        z-index: 1;
+    }
+    49% {
+        z-index: 1;
+    }
+    /* TITIK BALIK: Saat di depan container */
     50% { 
-        transform: rotate(180deg) translateX(200px) rotate(-180deg) scale(1.2); 
+        transform: translate(-50%, -50%) rotate(180deg) translateX(220px) rotate(-180deg) scale(1.3);
         z-index: 20; 
+        opacity: 1;
+        filter: blur(0px) brightness(1.2);
     }
-    /* 75% : Kembali ke samping */
-    75% { z-index: 20; }
-    /* 100% : Kembali ke belakang */
+    51% {
+        z-index: 20;
+    }
+    75% {
+        z-index: 20;
+    }
     100% { 
-        transform: rotate(360deg) translateX(200px) rotate(-360deg); 
-        z-index: 1; 
+        transform: translate(-50%, -50%) rotate(360deg) translateX(220px) rotate(-360deg) scale(0.8);
+        z-index: 1;
+        opacity: 0.6;
+        filter: blur(2px) brightness(0.7);
     }
-}
-
-@keyframes floating {
-    0%, 100% { margin-top: 0; }
-    50% { margin-top: 15px; }
 }
         /* --- CONTAINER UTAMA --- */
         .container { 
