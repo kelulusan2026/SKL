@@ -82,43 +82,42 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 160px; /* Ukuran pas untuk detail gambarnya */
+    width: 160px; 
     filter: drop-shadow(0 0 20px rgba(79, 172, 254, 0.5));
-    /* Gerakan smooth dan lambat agar cinematic */
-    animation: melintasKiri 28s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    /* Durasi 25 detik agar terasa lebih mantap meluncurnya */
+    animation: meluncurMaju 25s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     pointer-events: none;
     user-select: none;
     z-index: 1;
 }
 
-@keyframes melintasKiri {
+@keyframes meluncurMaju {
     0% { 
-        /* Mulai dari sisi kiri jauh, di belakang (z-index rendah) */
-        transform: translate(-50%, -50%) rotate(0deg) translateX(-45vw) translateY(10vh) scale(0.4);
+        /* Muncul dari KANAN ATAS (Jauh di belakang) */
+        transform: translate(-50%, -50%) rotate(20deg) translateX(45vw) translateY(-20vh) scale(0.4);
         z-index: 1;
-        opacity: 0.3;
-        filter: blur(4px) brightness(0.6);
+        opacity: 0.2;
+        filter: blur(6px) brightness(0.5);
     }
     
-    /* Titik saat mendekat ke tengah */
     45%, 55% {
-        z-index: 100; /* Pindah ke depan kontainer */
+        z-index: 100; /* Di depan kontainer */
     }
 
-    /* TITIK PUNCAK: Melintasi tepat di depan kontainer dari arah kanan ke kiri */
+    /* TITIK KRUSIAL: Melintas di depan kontainer */
     50% { 
-        /* scale(1.7) membuat astronot terlihat sangat dekat saat di depan kontainer */
-        transform: translate(-50%, -50%) rotate(-180deg) translateX(0vw) translateY(0vh) scale(1.7);
+        /* Berada tepat di tengah dengan skala besar */
+        transform: translate(-50%, -50%) rotate(0deg) translateX(0vw) translateY(0vh) scale(1.8);
         opacity: 1;
-        filter: blur(0px) brightness(1.1);
+        filter: blur(0px) brightness(1.2);
     }
 
     100% { 
-        /* Kembali ke sisi kiri, masuk ke kegelapan lagi */
-        transform: translate(-50%, -50%) rotate(-360deg) translateX(-45vw) translateY(10vh) scale(0.4);
+        /* Menghilang ke KIRI BAWAH (Sesuai arah hadap astronot) */
+        transform: translate(-50%, -50%) rotate(-20deg) translateX(-45vw) translateY(25vh) scale(0.4);
         z-index: 1;
-        opacity: 0.3;
-        filter: blur(4px) brightness(0.6);
+        opacity: 0.2;
+        filter: blur(6px) brightness(0.5);
     }
 }
         /* --- CONTAINER UTAMA --- */
