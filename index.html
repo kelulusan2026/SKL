@@ -78,19 +78,29 @@
         }
 
         /* --- ASTRONOT --- */
-        .astronaut {
-            position: absolute;
-            width: 100px;
-            z-index: 1;
-            filter: drop-shadow(0 0 15px var(--secondary));
-            animation: orbitAstronaut 25s linear infinite;
-        }
+        /* CSS ASTRONOT BARU - LEBIH CINEMATIC */
+.astronaut {
+    position: absolute;
+    width: 150px; /* Ukuran lebih besar agar detail terlihat */
+    z-index: 1;
+    /* Efek cahaya biru di pinggiran astronot */
+    filter: drop-shadow(0 0 20px rgba(0, 242, 254, 0.6));
+    animation: orbitAstronaut 30s linear infinite, floating 4s ease-in-out infinite;
+    pointer-events: none;
+    user-select: none;
+}
 
-        @keyframes orbitAstronaut {
-            from { transform: rotate(0deg) translateX(250px) rotate(0deg); }
-            to   { transform: rotate(360deg) translateX(250px) rotate(-360deg); }
-        }
+/* Animasi mengorbit (Melingkar) */
+@keyframes orbitAstronaut {
+    from { transform: rotate(0deg) translateX(180px) rotate(0deg); }
+    to   { transform: rotate(360deg) translateX(180px) rotate(-360deg); }
+}
 
+/* Animasi tambahan: Melayang naik turun halus */
+@keyframes floating {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: 20px; }
+}
         /* --- CONTAINER UTAMA --- */
         .container { 
             background: var(--glass);
