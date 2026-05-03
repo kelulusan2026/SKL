@@ -78,28 +78,43 @@
         }
 
         /* --- ASTRONOT --- */
-        /* CSS ASTRONOT BARU - LEBIH CINEMATIC */
+        /* ASTRONOT DENGAN EFEK LEWAT DEPAN-BELAKANG */
 .astronaut {
     position: absolute;
-    width: 150px; /* Ukuran lebih besar agar detail terlihat */
-    z-index: 1;
-    /* Efek cahaya biru di pinggiran astronot */
+    width: 140px;
     filter: drop-shadow(0 0 20px rgba(0, 242, 254, 0.6));
-    animation: orbitAstronaut 30s linear infinite, floating 4s ease-in-out infinite;
+    /* Gunakan animasi baru 'orbitComplex' */
+    animation: orbitComplex 25s linear infinite, floating 4s ease-in-out infinite;
     pointer-events: none;
     user-select: none;
+    transition: z-index 0.3s;
 }
 
-/* Animasi mengorbit (Melingkar) */
-@keyframes orbitAstronaut {
-    from { transform: rotate(0deg) translateX(180px) rotate(0deg); }
-    to   { transform: rotate(360deg) translateX(180px) rotate(-360deg); }
+@keyframes orbitComplex {
+    /* 0% : Di belakang (z-index: 1) */
+    0% { 
+        transform: rotate(0deg) translateX(200px) rotate(0deg); 
+        z-index: 1; 
+    }
+    /* 25% : Mulai bergerak ke samping */
+    25% { z-index: 1; }
+    /* 50% : Berada di depan container (z-index: 20) */
+    50% { 
+        transform: rotate(180deg) translateX(200px) rotate(-180deg) scale(1.2); 
+        z-index: 20; 
+    }
+    /* 75% : Kembali ke samping */
+    75% { z-index: 20; }
+    /* 100% : Kembali ke belakang */
+    100% { 
+        transform: rotate(360deg) translateX(200px) rotate(-360deg); 
+        z-index: 1; 
+    }
 }
 
-/* Animasi tambahan: Melayang naik turun halus */
 @keyframes floating {
     0%, 100% { margin-top: 0; }
-    50% { margin-top: 20px; }
+    50% { margin-top: 15px; }
 }
         /* --- CONTAINER UTAMA --- */
         .container { 
@@ -171,12 +186,10 @@
 
     <div class="stars-container" id="starField"></div>
 
-    <svg class="astronaut" viewBox="0 0 512 512">
-        <path fill="#e0e0e0" d="M377 105c-27-27-71-27-98 0l-15 15c-27 27-27 71 0 98l15 15c27 27 71 27 98 0l15-15c27-27 27-71 0-98l-15-15z"/>
-        <path fill="#4facfe" d="M356 126c-15-15-40-15-56 0l-15 15c-15 15-15 40 0 56l15 15c15 15 40 15 56 0l15-15c15-15 15-40 0-56l-15-15z"/>
-        <circle cx="256" cy="256" r="100" fill="#ffffff" />
-        <path fill="#333" d="M210 230a10 10 0 1 1 20 0 10 10 0 1 1-20 0zm72 0a10 10 0 1 1 20 0 10 10 0 1 1-20 0zM220 280s15 20 36 20 36-20 36-20" stroke="#333" stroke-width="5" fill="none" stroke-linecap="round"/>
-    </svg>
+   <!-- GANTI SVG TADI DENGAN KODE INI -->
+<img src="https://cdnt.artstation.com/static/portfolio/images/original/000/106/617/1435243110/Astronaut_3.png" 
+     alt="Cinematic Astronaut" 
+     class="astronaut">
 
     <div class="container animate__animated animate__zoomIn">
         <img src="logo.png" alt="Logo" class="logo-sekolah">
