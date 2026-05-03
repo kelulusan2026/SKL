@@ -30,7 +30,7 @@
             perspective: 1000px;
         }
 
-        /* --- EFEK LANGIT BINTANG --- */
+        /* --- BACKGROUND LANGIT BINTANG --- */
         .stars-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -91,7 +91,7 @@
             to   { transform: rotate(360deg) translateX(250px) rotate(-360deg); }
         }
 
-        /* --- CONTAINER --- */
+        /* --- CONTAINER UTAMA --- */
         .container { 
             background: var(--glass);
             backdrop-filter: blur(25px); 
@@ -110,7 +110,7 @@
         h1 { background: linear-gradient(to bottom, #fff, var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 4rem; margin: 0; font-weight: 900; letter-spacing: -3px; }
         .subtitle { font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 2.5rem; color: var(--secondary); font-weight: 600; }
 
-        /* --- COUNTDOWN STYLE --- */
+        /* --- COUNTDOWN --- */
         .countdown-container {
             margin-bottom: 2rem;
             background: rgba(0, 0, 0, 0.4);
@@ -124,7 +124,7 @@
         .time-box span:last-child { font-size: 0.6rem; text-transform: uppercase; opacity: 0.6; }
         .lock-msg { color: var(--error); font-size: 0.8rem; margin-top: 15px; font-weight: 600; letter-spacing: 1px; }
 
-        /* --- FORM STYLE --- */
+        /* --- FORM & INPUT --- */
         #inputArea { display: none; }
         input { width: 100%; padding: 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: white; font-size: 1.1rem; text-align: center; outline: none; transition: 0.4s; margin-bottom: 15px; box-sizing: border-box; }
         input:focus { border-color: var(--primary); background: rgba(255,255,255,0.1); box-shadow: 0 0 30px rgba(0, 242, 254, 0.15); }
@@ -136,9 +136,28 @@
         #loader { display: none; width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 20px 0; overflow: hidden; }
         #loader-bar { width: 0%; height: 100%; background: var(--primary); transition: width 0.5s ease; }
         .footer-note { font-size: 0.7rem; opacity: 0.4; margin-top: 3rem; }
+
+        /* --- INDIKATOR AUDIO --- */
+        #audioStatus {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            font-size: 0.7rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="interstellar.mp3" type="audio/mpeg">
+    </audio>
+
 
     <div class="stars-container" id="starField"></div>
 
@@ -180,7 +199,44 @@
     </div>
 
     <script>
-        // --- ANIMASI BACKGROUND ---
+        // --- LOGIKA CINEMATIC AUDIO (AUTO-TRIGGER) ---
+        const audio = document.getElementById('bgMusic');
+        let audioStarted = false;
+
+        function playAudio() {
+    if (!audioStarted) {
+        // Kita mulai dari 0.3 agar suara langsung terdengar jelas saat pertama jalan
+        audio.volume = 0.3; 
+        audio.play().then(() => {
+            audioStarted = true;
+            
+            let vol = 0.3;
+            const fade = setInterval(() => {
+                // Target maksimal adalah 1.0 (Volume 100%)
+                if (vol < 1.0) {
+                    vol += 0.05;
+                    // Pastikan volume tidak sengaja melebihi 1.0
+                    audio.volume = Math.min(vol, 1.0);
+                } else {
+                    clearInterval(fade);
+                }
+            }, 100);
+
+            document.getElementById('audioStatus').innerText = "🔊 AUDIO ACTIVE";
+            document.removeEventListener('mousemove', playAudio);
+            document.removeEventListener('touchstart', playAudio);
+        }).catch(err => {
+            console.log("Menunggu interaksi...");
+        });
+    }
+}
+
+        // Trigger saat mouse digerakkan atau layar disentuh
+        document.addEventListener('mousemove', playAudio);
+        document.addEventListener('touchstart', playAudio);
+
+
+        // --- ANIMASI BINTANG ---
         const field = document.getElementById('starField');
         for (let i = 0; i < 150; i++) {
             const star = document.createElement('div');
@@ -205,8 +261,7 @@
         }
         setInterval(createShootingStar, 2000);
 
-        // --- LOGIKA WAKTU (COUNTDOWN) ---
-        // Tanggal buka: 4 Mei 2026 jam 07:00 pagi
+        // --- LOGIKA COUNTDOWN ---
         const targetDate = new Date('May 4, 2026 07:00:00').getTime();
 
         function updateTimer() {
@@ -217,15 +272,10 @@
             const countdownArea = document.getElementById('countdownArea');
 
             if (distance < 0) {
-                // Waktu sudah tiba
                 inputArea.style.display = "block";
                 countdownArea.style.display = "none";
                 return;
             }
-
-            // Belum waktunya
-            inputArea.style.display = "none";
-            countdownArea.style.display = "block";
 
             const d = Math.floor(distance / (1000 * 60 * 60 * 24));
             const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -240,10 +290,12 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // --- LOGIKA CEK KELULUSAN ---
+        // --- LOGIKA CEK STATUS ---
         const daftarTidakLulus = ["0076372612", "0065736875", "0069244360", "0081064769", "0065373754", "0088122839", "0075031441", "0061383661", "0085543500", "0086366856"];
 
         async function cekStatus() {
+            playAudio(); // Pastikan audio jalan saat interaksi utama
+
             const input = document.getElementById('nisnInput').value.trim();
             const resBox = document.getElementById('result');
             const msg = document.getElementById('statusMsg');
@@ -277,7 +329,7 @@
                     resBox.className = "animate__animated animate__backInUp";
 
                     if (daftarTidakLulus.includes(input)) {
-                        msg.innerHTML = `<h2 style="color:var(--error)">Pengumuman</h2><p>Silakan hubungi Sekolah / Wali Kelas untuk informasi kelulusan Anda.</p>`;
+                        msg.innerHTML = `<h2 style="color:var(--error)">PEMBERITAHUAN</h2><p>Silakan hubungi Sekolah atau Wali Kelas untuk informasi kelulusan Anda.</p>`;
                         dl.innerHTML = "";
                         return;
                     }
@@ -288,17 +340,17 @@
                         confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
                         const nama = fileKetemu.replace(input, "").replace(/\.[^/.]+$/, "").trim();
                         msg.innerHTML = `
-                            <h2 style="color:var(--primary)">CONGRATS!</h2>
+                            <h2 style="color:var(--primary)">SELAMAT!</h2>
                             <p style="font-size:1.3rem; font-weight:700;">${nama}</p>
-                            <p style="opacity:0.7">Kamu resmi menjadi Alumni SMKN 1 Semparuk!</p>`;
+                            <p style="opacity:0.7">Perjalanan baru dimulai. Kamu resmi menjadi Alumni SMKN 1 Semparuk!</p>`;
                         dl.innerHTML = `<a href="SKL 2026/${encodeURIComponent(fileKetemu)}" class="btn-download" download>Download SKL (PDF)</a>`;
                     } else {
-                        msg.innerHTML = `<h2>UPS!</h2><p>Data tidak ditemukan. Pastikan NISN benar.</p>`;
+                        msg.innerHTML = `<h2>UPS!</h2><p>NISN tidak ditemukan di database. Pastikan input sudah benar ya.</p>`;
                         dl.innerHTML = "";
                     }
                 }, 1000);
             } catch (e) {
-                alert("Gagal memuat database!");
+                alert("Gagal memuat database! Hubungi Tim IT.");
                 btn.disabled = false;
             }
         }
